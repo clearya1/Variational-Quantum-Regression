@@ -80,9 +80,9 @@ for j in range(it):
     """============Input Data Sets Here and Polynomial Order================="""
 
     x = np.arange(0,2**(j+2),1)
-    y = (2*x-1)**3 + [random.uniform(-5,5) for p in range(2**(j+2))]
+    y = (2*x-1)**9 + [random.uniform(-5,5) for p in range(2**(j+2))]
     Ns[j] = 2**(j+2)
-    order = 3
+    order = 9
 
     """===============Normalising y data set and \ket{1}====================="""
 
@@ -132,16 +132,26 @@ for j in range(it):
     print("Classical Fit: ", class_fit)
 
 """==========================Plotting===================================="""
-
+"""
 print("Quantum Times: ", qtimes)
 print("Classical Times: ", ctimes)
 
-"""plt.scatter(Ns, qtimes, label="Quantum")
-plt.scatter(Ns, ctimes, label="Classical")
+qtimesfit = np.polyfit(Ns, qtimes, 1)
+ctimesfit = np.polyfit(Ns, ctimes, 1)
+
+Ntimesfit = np.linspace(min(Ns), max(Ns), 100)
+
+plt.scatter(Ns, qtimes, color='r', label="Quantum $\propto$"+str(np.round(qtimesfit[0],2))+"$\\times$N")
+plt.scatter(Ns, ctimes, color='b', label="Classical $\propto$"+str(np.round(ctimesfit[0],2))+"$\\times$N")
+plt.plot(Ntimesfit, Ntimesfit*qtimesfit[0]+qtimesfit[1], 'r')
+plt.plot(Ntimesfit, Ntimesfit*ctimesfit[0]+ctimesfit[1], 'b')
+
 plt.legend()
 plt.xlabel("N")
 plt.ylabel("Time [s]")
-plt.show()"""
+plt.show()
+
+"""
 
 #Results from running on Kay @ ICHEC follow:
 
@@ -154,11 +164,12 @@ for i in range(len(kay_ctimes)):
     
 kay_qtimesfit = np.polyfit(Ns, kay_qtimes, 1)
 kay_ctimesfit = np.polyfit(Ns, kay_ctimes, 1)
+print(kay_ctimesfit, kay_qtimesfit)
 
 Ntimesfit = np.linspace(min(Ns), max(Ns), 100)
 
-plt.scatter(Ns, kay_qtimes, color='r', label="Quantum $\propto$"+str(np.round(kay_qtimes[0],2))+"$\\times$N")
-plt.scatter(Ns, kay_ctimes, color='b', label="Classical $\propto$"+str(np.round(kay_ctimes[0],2))+"$\\times$N")
+plt.scatter(Ns, kay_qtimes, color='r', label="Quantum $\propto (1.56e^{-4}) \\times$N")
+plt.scatter(Ns, kay_ctimes, color='b', label="Classical $\propto (9e^{-8}) \\times$N")
 plt.plot(Ntimesfit, Ntimesfit*kay_qtimesfit[0]+kay_qtimesfit[1], 'r')
 plt.plot(Ntimesfit, Ntimesfit*kay_ctimesfit[0]+kay_ctimesfit[1], 'b')
 plt.xlabel("N")
